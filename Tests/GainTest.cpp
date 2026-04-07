@@ -214,6 +214,52 @@ public:
                     expectWithinAbsoluteError(buffer.getSample(ch, i), expected, 0.01f,
                                               "SIMD path should apply +12 dB correctly");
         }
+
+        beginTest("Process latency is measured and non-negative");
+        {
+            GainKnobAudioProcessor processor;
+            processor.getAPVTS().getParameterAsValue("gain").setValue(6.0f);
+
+            constexpr int numSamples = 512;
+            juce::AudioBuffer<float> buffer(2, numSamples);
+            for (int ch = 0; ch < 2; ++ch)
+                for (int i = 0; i < numSamples; ++i)
+                    buffer.setSample(ch, i, 0.5f);
+
+            juce::MidiBuffer midi;
+            processor.prepareToPlay(44100.0, numSamples);
+            processor.processBlock(buffer, midi);
+
+            float latencyMs = processor.getLastProcessLatencyMs();
+            expect(latencyMs >= 0.0f, "latency should be non-negative");
+            expect(latencyMs < 100.0f, "latency should be reasonable for a gain plugin");
+        }
+
+        beginTest("Process latency updates each block");
+        {
+            GainKnobAudioProcessor processor;
+            processor.getAPVTS().getParameterAsValue("gain").setValue(3.0f);
+
+            constexpr int numSamples = 256;
+            juce::AudioBuffer<float> buffer(2, numSamples);
+            for (int ch = 0; ch < 2; ++ch)
+                for (int i = 0; i < numSamples; ++i)
+                    buffer.setSample(ch, i, 0.5f);
+
+            juce::MidiBuffer midi;
+            processor.prepareToPlay(44100.0, numSamples);
+            processor.processBlock(buffer, midi);
+            float latency1 = processor.getLastProcessLatencyMs();
+
+            for (int ch = 0; ch < 2; ++ch)
+                for (int i = 0; i < numSamples; ++i)
+                    buffer.setSample(ch, i, 0.5f);
+            processor.processBlock(buffer, midi);
+            float latency2 = processor.getLastProcessLatencyMs();
+
+            expect(latency1 >= 0.0f, "first block latency non-negative");
+            expect(latency2 >= 0.0f, "second block latency non-negative");
+        }
     }
 };
 

@@ -32,11 +32,13 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
+    float getLastProcessLatencyMs() const { return lastProcessLatencyMs.load(std::memory_order_relaxed); }
 
 private:
     juce::AudioProcessorValueTreeState apvts;
     std::atomic<float>* gainParam = nullptr; // cached pointer — no hashmap lookup per block
     juce::SmoothedValue<float, juce::ValueSmoothingTypes::Multiplicative> smoothedGain;
+    std::atomic<float> lastProcessLatencyMs { 0.0f };
 
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 

@@ -50,6 +50,7 @@ bool GainKnobAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) 
 void GainKnobAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                            juce::MidiBuffer& /*midiMessages*/)
 {
+    const auto startTicks = juce::Time::getHighResolutionTicks();
     juce::ScopedNoDenormals noDenormals;
 
     const auto numChannels = getTotalNumInputChannels();
@@ -84,12 +85,22 @@ void GainKnobAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
         // Fast path: unity gain — skip entirely
         if (g == 1.0f)
+        {
+            lastProcessLatencyMs.store(
+                static_cast<float>(juce::Time::highResolutionTicksToSeconds(
+                    juce::Time::getHighResolutionTicks() - startTicks) * 1000.0),
+                std::memory_order_relaxed);
             return;
+        }
 
         // Fast path: silence — clear is cheaper than multiply
         if (g == 0.0f)
         {
             buffer.clear();
+            lastProcessLatencyMs.store(
+                static_cast<float>(juce::Time::highResolutionTicksToSeconds(
+                    juce::Time::getHighResolutionTicks() - startTicks) * 1000.0),
+                std::memory_order_relaxed);
             return;
         }
 
@@ -98,6 +109,11 @@ void GainKnobAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
             juce::FloatVectorOperations::multiply(
                 buffer.getWritePointer(ch), g, numSamples);
     }
+
+    lastProcessLatencyMs.store(
+        static_cast<float>(juce::Time::highResolutionTicksToSeconds(
+            juce::Time::getHighResolutionTicks() - startTicks) * 1000.0),
+        std::memory_order_relaxed);
 }
 
 juce::AudioProcessorEditor* GainKnobAudioProcessor::createEditor()
