@@ -26,7 +26,7 @@ A simple audio plugin with a single gain knob ranging from -inf (silence) to +24
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/conjius/gain-knob.git
+git clone https://github.com/conjius-dp/gain-knob.git
 cd gain-knob
 ```
 
