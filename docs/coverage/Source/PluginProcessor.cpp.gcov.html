@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-04-15 11:14:39</td>
+            <td class="headerValue">2026-04-15 11:45:38</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">92.9&nbsp;%</td>
@@ -60,13 +60,13 @@
               <td>
 <pre class="sourceHeading">            Line data    Source code</pre>
 <pre class="source">
-<span id="L1"><span class="lineNum">       1</span>              : // GainKnob audio processor — conjius-dp</span>
+<span id="L1"><span class="lineNum">       1</span>              : // Boostor audio processor — conjius-dp</span>
 <span id="L2"><span class="lineNum">       2</span>              : #include &quot;PluginProcessor.h&quot;</span>
-<span id="L3"><span class="lineNum">       3</span>              : #ifndef GAINKNOB_TESTS</span>
+<span id="L3"><span class="lineNum">       3</span>              : #ifndef BOOSTOR_TESTS</span>
 <span id="L4"><span class="lineNum">       4</span>              : #include &quot;PluginEditor.h&quot;</span>
 <span id="L5"><span class="lineNum">       5</span>              : #endif</span>
 <span id="L6"><span class="lineNum">       6</span>              : </span>
-<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">          28 : GainKnobAudioProcessor::GainKnobAudioProcessor()</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">          28 : BoostorAudioProcessor::BoostorAudioProcessor()</span></span>
 <span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">          28 :     : AudioProcessor(BusesProperties()</span></span>
 <span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">          14 :                          .withInput(&quot;Input&quot;, juce::AudioChannelSet::stereo(), true)</span></span>
 <span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">          14 :                          .withOutput(&quot;Output&quot;, juce::AudioChannelSet::stereo(), true)),</span></span>
@@ -76,7 +76,7 @@
 <span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">          14 : }</span></span>
 <span id="L15"><span class="lineNum">      15</span>              : </span>
 <span id="L16"><span class="lineNum">      16</span>              : juce::AudioProcessorValueTreeState::ParameterLayout</span>
-<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          14 : GainKnobAudioProcessor::createParameterLayout()</span></span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">          14 : BoostorAudioProcessor::createParameterLayout()</span></span>
 <span id="L18"><span class="lineNum">      18</span>              : {</span>
 <span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">          14 :     std::vector&lt;std::unique_ptr&lt;juce::RangedAudioParameter&gt;&gt; params;</span></span>
 <span id="L20"><span class="lineNum">      20</span>              : </span>
@@ -91,7 +91,7 @@
 <span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          14 :     return { params.begin(), params.end() };</span></span>
 <span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          14 : }</span></span>
 <span id="L31"><span class="lineNum">      31</span>              : </span>
-<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           8 : void GainKnobAudioProcessor::prepareToPlay(double sampleRate, int /*samplesPerBlock*/)</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           8 : void BoostorAudioProcessor::prepareToPlay(double sampleRate, int /*samplesPerBlock*/)</span></span>
 <span id="L33"><span class="lineNum">      33</span>              : {</span>
 <span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           8 :     smoothedGain.reset(sampleRate, 0.02);</span></span>
 <span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           8 :     float gainDB = gainParam-&gt;load();</span></span>
@@ -99,9 +99,9 @@
 <span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           8 :         juce::Decibels::decibelsToGain(gainDB, -100.0f));</span></span>
 <span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           8 : }</span></span>
 <span id="L39"><span class="lineNum">      39</span>              : </span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaUNC">           0 : void GainKnobAudioProcessor::releaseResources() {}</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaUNC">           0 : void BoostorAudioProcessor::releaseResources() {}</span></span>
 <span id="L41"><span class="lineNum">      41</span>              : </span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">           1 : bool GainKnobAudioProcessor::isBusesLayoutSupported(const BusesLayout&amp; layouts) const</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">           1 : bool BoostorAudioProcessor::isBusesLayoutSupported(const BusesLayout&amp; layouts) const</span></span>
 <span id="L43"><span class="lineNum">      43</span>              : {</span>
 <span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">           2 :     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()</span></span>
 <span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           1 :         &amp;&amp; layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())</span></span>
@@ -110,7 +110,7 @@
 <span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">           1 :     return layouts.getMainOutputChannelSet() == layouts.getMainInputChannelSet();</span></span>
 <span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">           1 : }</span></span>
 <span id="L50"><span class="lineNum">      50</span>              : </span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          12 : void GainKnobAudioProcessor::processBlock(juce::AudioBuffer&lt;float&gt;&amp; buffer,</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          12 : void BoostorAudioProcessor::processBlock(juce::AudioBuffer&lt;float&gt;&amp; buffer,</span></span>
 <span id="L52"><span class="lineNum">      52</span>              :                                            juce::MidiBuffer&amp; /*midiMessages*/)</span>
 <span id="L53"><span class="lineNum">      53</span>              : {</span>
 <span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          12 :     const auto startTicks = juce::Time::getHighResolutionTicks();</span></span>
@@ -179,30 +179,30 @@
 <span id="L117"><span class="lineNum">     117</span>              :         std::memory_order_relaxed);</span>
 <span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC">          12 : }</span></span>
 <span id="L119"><span class="lineNum">     119</span>              : </span>
-<span id="L120"><span class="lineNum">     120</span> <span class="tlaUNC">           0 : juce::AudioProcessorEditor* GainKnobAudioProcessor::createEditor()</span></span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaUNC">           0 : juce::AudioProcessorEditor* BoostorAudioProcessor::createEditor()</span></span>
 <span id="L121"><span class="lineNum">     121</span>              : {</span>
-<span id="L122"><span class="lineNum">     122</span>              : #ifndef GAINKNOB_TESTS</span>
-<span id="L123"><span class="lineNum">     123</span>              :     return new GainKnobAudioProcessorEditor(*this);</span>
+<span id="L122"><span class="lineNum">     122</span>              : #ifndef BOOSTOR_TESTS</span>
+<span id="L123"><span class="lineNum">     123</span>              :     return new BoostorAudioProcessorEditor(*this);</span>
 <span id="L124"><span class="lineNum">     124</span>              : #else</span>
 <span id="L125"><span class="lineNum">     125</span> <span class="tlaUNC">           0 :     return nullptr;</span></span>
 <span id="L126"><span class="lineNum">     126</span>              : #endif</span>
 <span id="L127"><span class="lineNum">     127</span>              : }</span>
 <span id="L128"><span class="lineNum">     128</span>              : </span>
-<span id="L129"><span class="lineNum">     129</span> <span class="tlaUNC">           0 : bool GainKnobAudioProcessor::hasEditor() const { return true; }</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaUNC">           0 : bool BoostorAudioProcessor::hasEditor() const { return true; }</span></span>
 <span id="L130"><span class="lineNum">     130</span>              : </span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaUNC">           0 : const juce::String GainKnobAudioProcessor::getName() const { return &quot;GainKnob&quot;; }</span></span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaUNC">           0 : bool GainKnobAudioProcessor::acceptsMidi() const { return true; }</span></span>
-<span id="L133"><span class="lineNum">     133</span> <span class="tlaUNC">           0 : bool GainKnobAudioProcessor::producesMidi() const { return false; }</span></span>
-<span id="L134"><span class="lineNum">     134</span> <span class="tlaUNC">           0 : bool GainKnobAudioProcessor::isMidiEffect() const { return false; }</span></span>
-<span id="L135"><span class="lineNum">     135</span> <span class="tlaUNC">           0 : double GainKnobAudioProcessor::getTailLengthSeconds() const { return 0.0; }</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaUNC">           0 : const juce::String BoostorAudioProcessor::getName() const { return &quot;boostor&quot;; }</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaUNC">           0 : bool BoostorAudioProcessor::acceptsMidi() const { return true; }</span></span>
+<span id="L133"><span class="lineNum">     133</span> <span class="tlaUNC">           0 : bool BoostorAudioProcessor::producesMidi() const { return false; }</span></span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaUNC">           0 : bool BoostorAudioProcessor::isMidiEffect() const { return false; }</span></span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaUNC">           0 : double BoostorAudioProcessor::getTailLengthSeconds() const { return 0.0; }</span></span>
 <span id="L136"><span class="lineNum">     136</span>              : </span>
-<span id="L137"><span class="lineNum">     137</span> <span class="tlaUNC">           0 : int GainKnobAudioProcessor::getNumPrograms() { return 1; }</span></span>
-<span id="L138"><span class="lineNum">     138</span> <span class="tlaUNC">           0 : int GainKnobAudioProcessor::getCurrentProgram() { return 0; }</span></span>
-<span id="L139"><span class="lineNum">     139</span> <span class="tlaUNC">           0 : void GainKnobAudioProcessor::setCurrentProgram(int /*index*/) {}</span></span>
-<span id="L140"><span class="lineNum">     140</span> <span class="tlaUNC">           0 : const juce::String GainKnobAudioProcessor::getProgramName(int /*index*/) { return {}; }</span></span>
-<span id="L141"><span class="lineNum">     141</span> <span class="tlaUNC">           0 : void GainKnobAudioProcessor::changeProgramName(int /*index*/, const juce::String&amp; /*newName*/) {}</span></span>
+<span id="L137"><span class="lineNum">     137</span> <span class="tlaUNC">           0 : int BoostorAudioProcessor::getNumPrograms() { return 1; }</span></span>
+<span id="L138"><span class="lineNum">     138</span> <span class="tlaUNC">           0 : int BoostorAudioProcessor::getCurrentProgram() { return 0; }</span></span>
+<span id="L139"><span class="lineNum">     139</span> <span class="tlaUNC">           0 : void BoostorAudioProcessor::setCurrentProgram(int /*index*/) {}</span></span>
+<span id="L140"><span class="lineNum">     140</span> <span class="tlaUNC">           0 : const juce::String BoostorAudioProcessor::getProgramName(int /*index*/) { return {}; }</span></span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaUNC">           0 : void BoostorAudioProcessor::changeProgramName(int /*index*/, const juce::String&amp; /*newName*/) {}</span></span>
 <span id="L142"><span class="lineNum">     142</span>              : </span>
-<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">           1 : void GainKnobAudioProcessor::getStateInformation(juce::MemoryBlock&amp; destData)</span></span>
+<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">           1 : void BoostorAudioProcessor::getStateInformation(juce::MemoryBlock&amp; destData)</span></span>
 <span id="L144"><span class="lineNum">     144</span>              : {</span>
 <span id="L145"><span class="lineNum">     145</span> <span class="tlaGNC">           1 :     auto state = apvts.copyState();</span></span>
 <span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">           1 :     std::unique_ptr&lt;juce::XmlElement&gt; xml(state.createXml());</span></span>
@@ -211,7 +211,7 @@
 <span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">           1 :     copyXmlToBinary(*xml, destData);</span></span>
 <span id="L150"><span class="lineNum">     150</span> <span class="tlaGNC">           1 : }</span></span>
 <span id="L151"><span class="lineNum">     151</span>              : </span>
-<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">           1 : void GainKnobAudioProcessor::setStateInformation(const void* data, int sizeInBytes)</span></span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">           1 : void BoostorAudioProcessor::setStateInformation(const void* data, int sizeInBytes)</span></span>
 <span id="L153"><span class="lineNum">     153</span>              : {</span>
 <span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">           1 :     std::unique_ptr&lt;juce::XmlElement&gt; xml(getXmlFromBinary(data, sizeInBytes));</span></span>
 <span id="L155"><span class="lineNum">     155</span> <span class="tlaGNC">           1 :     if (xml != nullptr &amp;&amp; xml-&gt;hasTagName(apvts.state.getType()))</span></span>
@@ -224,7 +224,7 @@
 <span id="L162"><span class="lineNum">     162</span>              : </span>
 <span id="L163"><span class="lineNum">     163</span> <span class="tlaUNC">           0 : juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()</span></span>
 <span id="L164"><span class="lineNum">     164</span>              : {</span>
-<span id="L165"><span class="lineNum">     165</span> <span class="tlaUNC">           0 :     return new GainKnobAudioProcessor();</span></span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaUNC">           0 :     return new BoostorAudioProcessor();</span></span>
 <span id="L166"><span class="lineNum">     166</span> <span class="tlaUNC">           0 : }</span></span>
         </pre>
               </td>

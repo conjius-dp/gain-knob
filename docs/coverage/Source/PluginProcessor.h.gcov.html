@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-04-15 11:14:39</td>
+            <td class="headerValue">2026-04-15 11:45:38</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryMed">80.0&nbsp;%</td>
@@ -65,11 +65,11 @@
 <span id="L3"><span class="lineNum">       3</span>              : #include &lt;juce_dsp/juce_dsp.h&gt;</span>
 <span id="L4"><span class="lineNum">       4</span>              : #include &quot;KnobDesign.h&quot;</span>
 <span id="L5"><span class="lineNum">       5</span>              : </span>
-<span id="L6"><span class="lineNum">       6</span>              : class GainKnobAudioProcessor : public juce::AudioProcessor</span>
+<span id="L6"><span class="lineNum">       6</span>              : class BoostorAudioProcessor : public juce::AudioProcessor</span>
 <span id="L7"><span class="lineNum">       7</span>              : {</span>
 <span id="L8"><span class="lineNum">       8</span>              : public:</span>
-<span id="L9"><span class="lineNum">       9</span>              :     GainKnobAudioProcessor();</span>
-<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">          28 :     ~GainKnobAudioProcessor() override = default;</span></span>
+<span id="L9"><span class="lineNum">       9</span>              :     BoostorAudioProcessor();</span>
+<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">          28 :     ~BoostorAudioProcessor() override = default;</span></span>
 <span id="L11"><span class="lineNum">      11</span>              : </span>
 <span id="L12"><span class="lineNum">      12</span>              :     void prepareToPlay(double sampleRate, int samplesPerBlock) override;</span>
 <span id="L13"><span class="lineNum">      13</span>              :     void releaseResources() override;</span>
@@ -109,7 +109,7 @@
 <span id="L47"><span class="lineNum">      47</span>              : </span>
 <span id="L48"><span class="lineNum">      48</span>              :     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();</span>
 <span id="L49"><span class="lineNum">      49</span>              : </span>
-<span id="L50"><span class="lineNum">      50</span>              :     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GainKnobAudioProcessor)</span>
+<span id="L50"><span class="lineNum">      50</span>              :     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BoostorAudioProcessor)</span>
 <span id="L51"><span class="lineNum">      51</span>              : };</span>
         </pre>
               </td>
