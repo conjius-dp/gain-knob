@@ -17,6 +17,8 @@ A simple audio plugin with a single gain knob ranging from -inf (silence) to +24
 | [JUCE](https://github.com/juce-framework/JUCE) | **8.0.12** | Must be cloned into the project root as `JUCE/` |
 | CMake | **≥ 3.22** | Tested with 3.29.2 |
 | C++ compiler | **C++17** | Tested with Apple Clang 17.0.0 |
+| [Ninja](https://ninja-build.org/) | **≥ 1.11** | Fast build system, replaces Make |
+| [ccache](https://ccache.dev/) | **≥ 4.0** | Compiler cache for faster rebuilds |
 
 ## Setup
 
@@ -33,12 +35,22 @@ cd gain-knob
 git clone --branch 8.0.12 --depth 1 https://github.com/juce-framework/JUCE.git
 ```
 
-3. Configure and build:
+3. Install Ninja and ccache:
 
 ```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+brew install ninja ccache
+```
+
+4. Configure and build:
+
+```bash
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+  -DCMAKE_C_COMPILER_LAUNCHER=ccache
 cmake --build build
 ```
+
+Ninja builds all targets in parallel by default. ccache caches compiled objects so incremental rebuilds after small changes are near-instant.
 
 The built plugins are in `build/GainKnob_artefacts/Release/`:
 

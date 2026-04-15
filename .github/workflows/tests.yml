@@ -57,14 +57,14 @@ jobs:
           brew install lcov
           lcov --capture --directory build --output-file coverage.info \
                --ignore-errors inconsistent,format,count
-          lcov --remove coverage.info '*/JUCE/*' '*/tests/*' '/usr/*' \
+          lcov --remove coverage.info '*/JUCE/*' '*/tests/*' '/usr/*' '*/build/*' '*/Frameworks/*' \
                --output-file coverage.info --ignore-errors unused,inconsistent,format
           lcov --list coverage.info --ignore-errors inconsistent,format
 
       - name: Generate HTML coverage report
         run: |
           genhtml coverage.info --output-directory coverage-html \
-                 --ignore-errors inconsistent,format,category
+                 --ignore-errors inconsistent,format,category,source
           rm -rf docs/coverage
           cp -r coverage-html docs/coverage
 
