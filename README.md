@@ -9,6 +9,12 @@
   <a href="https://github.com/conjius-dp/boostor/releases"><img src="https://img.shields.io/github/v/release/conjius-dp/boostor?include_prereleases&label=nightly" alt="Nightly"></a>
 </p>
 
+<p align="center">
+  <a href="https://github.com/conjius-dp/boostor/releases/latest">
+    <img src="https://img.shields.io/badge/Download_for_macOS-d48300?style=for-the-badge&logo=apple&logoColor=white" alt="Download for macOS">
+  </a>
+</p>
+
 A simple audio plugin with a single gain knob ranging from -inf (silence) to +24 dB. The gain parameter is fully automatable, so DAWs can map it to any MIDI controller.
 
 **Formats:** VST3, AU, Standalone
