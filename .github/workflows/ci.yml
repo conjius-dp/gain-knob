@@ -65,6 +65,7 @@ jobs:
         run: |
           genhtml coverage.info --output-directory coverage-html \
                  --ignore-errors inconsistent,format,category,source
+          mkdir -p docs
           rm -rf docs/coverage
           cp -r coverage-html docs/coverage
 
