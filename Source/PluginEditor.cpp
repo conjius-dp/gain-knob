@@ -34,6 +34,11 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
     // Force text update with new function
     gainSlider.updateText();
 
+    // ── Animated snap to default on double-click ──
+    gainSlider.onDoubleClick = [this]() {
+        startSnapAnimation(gainSlider, gainAnim);
+    };
+
     latencyLabel.setText("Latency: 0ms", juce::dontSendNotification);
     latencyLabel.setJustificationType(juce::Justification::centredLeft);
     latencyLabel.setColour(juce::Label::textColourId, KnobDesign::accentColour.darker(0.3f));
@@ -52,7 +57,7 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
         BinaryData::conjiusavatartransparentbg_png,
         BinaryData::conjiusavatartransparentbg_pngSize);
 
-    startTimerHz(30);
+    startTimerHz(60);
 }
 
 BoostorAudioProcessorEditor::~BoostorAudioProcessorEditor()
@@ -63,6 +68,8 @@ BoostorAudioProcessorEditor::~BoostorAudioProcessorEditor()
 
 void BoostorAudioProcessorEditor::timerCallback()
 {
+    updateSnapAnimation(gainSlider, gainAnim);
+
     float latencyMs = processorRef.getLastProcessLatencyMs();
     latencyLabel.setText("Latency: " + juce::String(latencyMs, 3) + "ms",
                          juce::dontSendNotification);
@@ -140,4 +147,31 @@ void BoostorAudioProcessorEditor::resized()
             label->setInterceptsMouseClicks(false, false);  // pass mouse events to slider
         }
     }
+}
+
+void BoostorAudioProcessorEditor::startSnapAnimation(juce::Slider& slider, SliderAnimation& anim)
+{
+    auto* param = processorRef.getAPVTS().getParameter("gain");
+    if (param == nullptr) return;
+
+    anim.currentValue = slider.getValue();
+    anim.targetValue = static_cast<double>(param->getDefaultValue())
+                       * (slider.getMaximum() - slider.getMinimum()) + slider.getMinimum();
+    anim.active = true;
+}
+
+void BoostorAudioProcessorEditor::updateSnapAnimation(juce::Slider& slider, SliderAnimation& anim)
+{
+    if (!anim.active) return;
+
+    constexpr double smoothing = 0.15;
+    anim.currentValue += (anim.targetValue - anim.currentValue) * smoothing;
+
+    if (std::abs(anim.targetValue - anim.currentValue) < 0.01)
+    {
+        anim.currentValue = anim.targetValue;
+        anim.active = false;
+    }
+
+    slider.setValue(anim.currentValue, juce::sendNotificationAsync);
 }
