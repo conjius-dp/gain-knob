@@ -1,4 +1,4 @@
-name: Standalone
+name: CI
 
 on:
   push:
@@ -6,16 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
-  build:
-    runs-on: macos-latest
+  build-and-test:
+    runs-on: macos-15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install tools
-        run: brew install ninja ccache
+      - name: Install ccache
+        run: brew install ccache
 
       - name: Cache JUCE
         id: cache-juce
@@ -37,11 +40,58 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ccache
-          key: ccache-standalone-${{ github.sha }}
-          restore-keys: ccache-standalone-
+          key: ccache-${{ hashFiles('Source/**', 'Tests/**', 'CMakeLists.txt') }}
+          restore-keys: ccache-
 
       - name: Configure
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_FLAGS="--coverage" -DCMAKE_C_FLAGS="--coverage"
 
-      - name: Build standalone
-        run: cmake --build build --target GainKnob_Standalone
+      - name: Build all targets
+        run: cmake --build build
+
+      - name: Run tests
+        run: ./build/GainKnobTests_artefacts/Release/GainKnobTests
+
+      - name: Generate coverage report
+        run: |
+          brew install lcov
+          lcov --capture --directory build --output-file coverage.info \
+               --ignore-errors inconsistent,format,count
+          lcov --remove coverage.info '*/JUCE/*' '*/tests/*' '/usr/*' '*/build/*' '*/Frameworks/*' \
+               --output-file coverage.info --ignore-errors unused,inconsistent,format
+          lcov --list coverage.info --ignore-errors inconsistent,format
+
+      - name: Generate HTML coverage report
+        run: |
+          genhtml coverage.info --output-directory coverage-html \
+                 --ignore-errors inconsistent,format,category,source
+          rm -rf docs/coverage
+          cp -r coverage-html docs/coverage
+
+      - name: Update coverage badge and report
+        if: github.ref == 'refs/heads/main'
+        run: |
+          LINE_PCT=$(lcov --summary coverage.info 2>&1 | grep 'lines' | sed 's/.*: *\([0-9.]*\)%.*/\1/')
+          echo "Line coverage: ${LINE_PCT}%"
+
+          if [ "$(echo "$LINE_PCT >= 80" | bc)" -eq 1 ]; then
+            COLOR="brightgreen"
+          elif [ "$(echo "$LINE_PCT >= 60" | bc)" -eq 1 ]; then
+            COLOR="yellow"
+          else
+            COLOR="red"
+          fi
+
+          mkdir -p docs/badges
+          curl -s "https://img.shields.io/badge/coverage-${LINE_PCT}%25-${COLOR}" > docs/badges/coverage.svg
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/badges/coverage.svg docs/coverage
+          if git diff --cached --quiet; then
+            echo "Coverage unchanged, skipping commit"
+          else
+            git commit -m "Update coverage to ${LINE_PCT}%"
+            git pull --rebase origin main
+            git push
+          fi

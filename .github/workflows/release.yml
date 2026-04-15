@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: [Tests]
+    workflows: [CI]
     types: [completed]
     branches: [main]
 
@@ -37,7 +37,7 @@ jobs:
   release:
     needs: check-changes
     if: needs.check-changes.outputs.plugin_changed == 'true'
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout
@@ -45,23 +45,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install tools
-        run: brew install ninja ccache
+      - name: Install ccache
+        run: brew install ccache
 
       - name: Read version and bump patch
         id: version
         run: |
-          # Read current version from CMakeLists.txt
           CURRENT=$(sed -n 's/.*project(GainKnob VERSION \([0-9]*\.[0-9]*\.[0-9]*\)).*/\1/p' CMakeLists.txt)
           MAJOR=$(echo "$CURRENT" | cut -d. -f1)
           MINOR=$(echo "$CURRENT" | cut -d. -f2)
           PATCH=$(echo "$CURRENT" | cut -d. -f3)
 
-          # Bump patch
           NEW_PATCH=$((PATCH + 1))
           NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
 
-          # Update CMakeLists.txt
           sed -i '' "s/project(GainKnob VERSION ${CURRENT})/project(GainKnob VERSION ${NEW_VERSION})/" CMakeLists.txt
 
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
@@ -100,7 +97,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ccache
-          key: ccache-release-${{ github.sha }}
+          key: ccache-release-${{ hashFiles('Source/**', 'CMakeLists.txt') }}
           restore-keys: ccache-release-
 
       - name: Configure (Release)
