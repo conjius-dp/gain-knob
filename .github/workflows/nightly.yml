@@ -45,6 +45,9 @@ jobs:
       - name: Build VST3
         run: cmake --build build --target Boostor_VST3
 
+      - name: Build AU
+        run: cmake --build build --target Boostor_AU
+
       - name: Zip Standalone
         run: |
           cd build/Boostor_artefacts/Release/Standalone
@@ -54,6 +57,11 @@ jobs:
         run: |
           cd build/Boostor_artefacts/Release/VST3
           zip -r "$GITHUB_WORKSPACE/Boostor-macOS-VST3.zip" Boostor.vst3
+
+      - name: Zip AU
+        run: |
+          cd build/Boostor_artefacts/Release/AU
+          zip -r "$GITHUB_WORKSPACE/boostor-macOS-AU.zip" Boostor.component
 
       - name: Delete existing nightly release
         env:
@@ -72,4 +80,5 @@ jobs:
           **This is a pre-release — not recommended for production use.**" \
             --prerelease \
             Boostor-macOS-Standalone.zip \
-            Boostor-macOS-VST3.zip
+            Boostor-macOS-VST3.zip \
+            boostor-macOS-AU.zip
