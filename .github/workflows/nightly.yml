@@ -8,9 +8,8 @@ permissions:
   contents: write
 
 jobs:
-  nightly:
+  build-macos:
     runs-on: macos-15
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,6 +62,66 @@ jobs:
           cd build/Boostor_artefacts/Release/AU
           zip -r "$GITHUB_WORKSPACE/boostor-macOS-AU.zip" Boostor.component
 
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifacts
+          path: |
+            Boostor-macOS-Standalone.zip
+            Boostor-macOS-VST3.zip
+            boostor-macOS-AU.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache JUCE
+        id: cache-juce
+        uses: actions/cache@v4
+        with:
+          path: JUCE
+          key: juce-8.0.12
+
+      - name: Clone JUCE
+        if: steps.cache-juce.outputs.cache-hit != 'true'
+        run: git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git JUCE
+
+      - name: Configure (Release)
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build VST3
+        run: cmake --build build --config Release --target Boostor_VST3
+
+      - name: Zip VST3
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build/Boostor_artefacts/Release/VST3/Boostor.vst3 -DestinationPath Boostor-Windows-VST3.zip
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: Boostor-Windows-VST3.zip
+
+  create-nightly:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-artifacts
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-artifacts
+
       - name: Delete existing nightly release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -75,10 +134,11 @@ jobs:
         run: |
           gh release create nightly \
             --title "Nightly Build" \
-            --notes "Automated nightly build from PR #${{ github.event.pull_request.number }} (${{ github.head_ref }}).
+            --notes "Automated nightly build from PR #${{ github.event.pull_request.number }} (${{ github.event.pull_request.head.ref }}).
 
           **This is a pre-release — not recommended for production use.**" \
             --prerelease \
             Boostor-macOS-Standalone.zip \
             Boostor-macOS-VST3.zip \
-            boostor-macOS-AU.zip
+            boostor-macOS-AU.zip \
+            Boostor-Windows-VST3.zip
