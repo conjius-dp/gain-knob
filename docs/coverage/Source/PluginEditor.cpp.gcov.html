@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-04-16 17:37:08</td>
+            <td class="headerValue">2026-04-16 17:40:09</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">99.4&nbsp;%</td>
@@ -128,30 +128,30 @@
 <span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">          10 :     stopTimer();</span></span>
 <span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">          30 : }</span></span>
 <span id="L68"><span class="lineNum">      68</span>              : </span>
-<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">          67 : void BoostorAudioProcessorEditor::timerCallback()</span></span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">          70 : void BoostorAudioProcessorEditor::timerCallback()</span></span>
 <span id="L70"><span class="lineNum">      70</span>              : {</span>
-<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">          67 :     updateSnapAnimation(gainSlider, gainAnim);</span></span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">          70 :     updateSnapAnimation(gainSlider, gainAnim);</span></span>
 <span id="L72"><span class="lineNum">      72</span>              : </span>
-<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">          67 :     float latencyMs = processorRef.getLastProcessLatencyMs();</span></span>
-<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">          67 :     latencyLabel.setText(&quot;Latency: &quot; + juce::String(latencyMs, 3) + &quot;ms&quot;,</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">          70 :     float latencyMs = processorRef.getLastProcessLatencyMs();</span></span>
+<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">          70 :     latencyLabel.setText(&quot;Latency: &quot; + juce::String(latencyMs, 3) + &quot;ms&quot;,</span></span>
 <span id="L75"><span class="lineNum">      75</span>              :                          juce::dontSendNotification);</span>
-<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">          67 : }</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">          70 : }</span></span>
 <span id="L77"><span class="lineNum">      77</span>              : </span>
-<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">          61 : void BoostorAudioProcessorEditor::paint(juce::Graphics&amp; g)</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">          67 : void BoostorAudioProcessorEditor::paint(juce::Graphics&amp; g)</span></span>
 <span id="L79"><span class="lineNum">      79</span>              : {</span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">          61 :     g.fillAll(KnobDesign::bgColour);</span></span>
+<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">          67 :     g.fillAll(KnobDesign::bgColour);</span></span>
 <span id="L81"><span class="lineNum">      81</span>              : </span>
 <span id="L82"><span class="lineNum">      82</span>              :     // Draw logo in bottom-left corner</span>
-<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">          61 :     if (logoImage.isValid())</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">          67 :     if (logoImage.isValid())</span></span>
 <span id="L84"><span class="lineNum">      84</span>              :     {</span>
-<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">          61 :         float scale = static_cast&lt;float&gt;(getWidth()) / static_cast&lt;float&gt;(KnobDesign::defaultSize);</span></span>
-<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">          61 :         int logoSize = static_cast&lt;int&gt;(37.5f * scale);  // 150/4 = 37.5</span></span>
-<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">          61 :         int padLeft = logoSize / 3;</span></span>
-<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">         122 :         g.drawImage(logoImage,</span></span>
-<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">          61 :                     padLeft, getHeight() - logoSize, logoSize, logoSize,</span></span>
-<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC">          61 :                     0, 0, logoImage.getWidth(), logoImage.getHeight());</span></span>
-<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">          61 :     }</span></span>
-<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">          61 : }</span></span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">          67 :         float scale = static_cast&lt;float&gt;(getWidth()) / static_cast&lt;float&gt;(KnobDesign::defaultSize);</span></span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">          67 :         int logoSize = static_cast&lt;int&gt;(37.5f * scale);  // 150/4 = 37.5</span></span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">          67 :         int padLeft = logoSize / 3;</span></span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">         134 :         g.drawImage(logoImage,</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">          67 :                     padLeft, getHeight() - logoSize, logoSize, logoSize,</span></span>
+<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC">          67 :                     0, 0, logoImage.getWidth(), logoImage.getHeight());</span></span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">          67 :     }</span></span>
+<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">          67 : }</span></span>
 <span id="L93"><span class="lineNum">      93</span>              : </span>
 <span id="L94"><span class="lineNum">      94</span> <span class="tlaGNC">          10 : void BoostorAudioProcessorEditor::resized()</span></span>
 <span id="L95"><span class="lineNum">      95</span>              : {</span>
@@ -222,9 +222,9 @@
 <span id="L160"><span class="lineNum">     160</span> <span class="tlaUNC">           0 :     anim.active = true;</span></span>
 <span id="L161"><span class="lineNum">     161</span> <span class="tlaUNC">           0 : }</span></span>
 <span id="L162"><span class="lineNum">     162</span>              : </span>
-<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          67 : void BoostorAudioProcessorEditor::updateSnapAnimation(juce::Slider&amp; slider, SliderAnimation&amp; anim)</span></span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          70 : void BoostorAudioProcessorEditor::updateSnapAnimation(juce::Slider&amp; slider, SliderAnimation&amp; anim)</span></span>
 <span id="L164"><span class="lineNum">     164</span>              : {</span>
-<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">          67 :     if (!anim.active) return;</span></span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">          70 :     if (!anim.active) return;</span></span>
 <span id="L166"><span class="lineNum">     166</span>              : </span>
 <span id="L167"><span class="lineNum">     167</span> <span class="tlaUNC">           0 :     constexpr double smoothing = 0.15;</span></span>
 <span id="L168"><span class="lineNum">     168</span> <span class="tlaUNC">           0 :     anim.currentValue += (anim.targetValue - anim.currentValue) * smoothing;</span></span>
@@ -236,7 +236,7 @@
 <span id="L174"><span class="lineNum">     174</span> <span class="tlaUNC">           0 :     }</span></span>
 <span id="L175"><span class="lineNum">     175</span>              : </span>
 <span id="L176"><span class="lineNum">     176</span> <span class="tlaUNC">           0 :     slider.setValue(anim.currentValue, juce::sendNotificationAsync);</span></span>
-<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">          67 : }</span></span>
+<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">          70 : }</span></span>
         </pre>
               </td>
             </tr>
