@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-04-17 10:41:55</td>
+            <td class="headerValue">2026-04-17 10:57:07</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -95,7 +95,7 @@
 <span id="L33"><span class="lineNum">      33</span>              :     void setStateInformation(const void* data, int sizeInBytes) override;</span>
 <span id="L34"><span class="lineNum">      34</span>              : </span>
 <span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">          23 :     juce::AudioProcessorValueTreeState&amp; getAPVTS() { return apvts; }</span></span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           9 :     float getLastProcessLatencyMs() const { return lastProcessLatencyMs.load(std::memory_order_relaxed); }</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">          10 :     float getLastProcessLatencyMs() const { return lastProcessLatencyMs.load(std::memory_order_relaxed); }</span></span>
 <span id="L37"><span class="lineNum">      37</span>              : </span>
 <span id="L38"><span class="lineNum">      38</span>              :     // Editor size persistence</span>
 <span id="L39"><span class="lineNum">      39</span>              :     std::atomic&lt;int&gt; editorWidth  { KnobDesign::defaultSize };</span>
