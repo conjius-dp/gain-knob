@@ -94,6 +94,14 @@ BoostorAudioProcessorEditor::~BoostorAudioProcessorEditor()
     stopTimer();
 }
 
+void BoostorAudioProcessorEditor::setChromeVisible(bool visible)
+{
+    showChrome = visible;
+    latencyLabel.setVisible(visible);
+    latencyHitArea.setVisible(visible);
+    repaint();
+}
+
 void BoostorAudioProcessorEditor::mouseMove(const juce::MouseEvent& e)
 {
     auto pos = e.getEventRelativeTo(this).getPosition();
@@ -210,16 +218,14 @@ void BoostorAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(KnobDesign::bgColour);
 
-    // Draw conjius logo in bottom-left — inside the orange border padding so
-    // it sits cleanly within the bordered region.
-    if (logoImage.isValid())
+    // Draw conjius logo in bottom-left — dim by default, brighten + scale up on hover
+    if (logoImage.isValid() && showChrome)
     {
         float scale = static_cast<float>(getWidth()) / static_cast<float>(KnobDesign::defaultSize);
         int baseSize = static_cast<int>(37.5f * scale);
-        int padPx = static_cast<int>(20.0f * scale); // matches editor border inset
         int padLeft = baseSize / 3;
-        int baseX = padPx + padLeft;
-        int baseY = getHeight() - padPx - baseSize;
+        int baseX = padLeft;
+        int baseY = getHeight() - baseSize;
         logoBounds = { baseX, baseY, baseSize, baseSize };
 
         float hoverScale = 1.0f + 0.2f * logoHoverProgress;
@@ -284,7 +290,6 @@ void BoostorAudioProcessorEditor::resized()
     }
 
     float w = static_cast<float>(getWidth());
-    float margin = w * 0.1f;
 
     // Dynamic "Gain" label — placed below the title logo
     float gainFontSize = w * KnobDesign::gainLabelScale;
@@ -299,12 +304,11 @@ void BoostorAudioProcessorEditor::resized()
     latencyLabel.setFont(conjusLAF.getRegularFont(latencyFontSize));
     latencyLabel.setJustificationType(juce::Justification::centredBottom);
     int latencyH = static_cast<int>(latencyFontSize * 2.0f);
-    const int padPx = static_cast<int>(20.0f * w / static_cast<float>(KnobDesign::defaultSize));
-    latencyBaseBounds = { 0, getHeight() - latencyH - padPx, getWidth(), latencyH };
+    latencyBaseBounds = { 0, getHeight() - latencyH, getWidth(), latencyH };
     latencyBaseFontSize = latencyFontSize;
     // Hit area: narrow — matches the actual text width with a small horizontal pad
     auto latencyFont = conjusLAF.getRegularFont(latencyFontSize);
-    int textW = static_cast<int>(latencyFont.getStringWidthFloat("LATENCY: 0.000ms"));
+    int textW = static_cast<int>(KnobDesign::stringWidth(latencyFont, "LATENCY: 0.000ms"));
     int hitPadX = static_cast<int>(latencyFontSize * 0.8f);
     int hitPadY = latencyH;
     int hitW = textW + 2 * hitPadX;

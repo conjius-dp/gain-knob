@@ -51,6 +51,10 @@ int main(int argc, char** argv)
     }
     editor->setSize(width, height);
 
+    // Hide the conjius logo + latency label so the README image is clean.
+    if (auto* boostorEditor = dynamic_cast<BoostorAudioProcessorEditor*>(editor.get()))
+        boostorEditor->setChromeVisible(false);
+
     auto snap = editor->createComponentSnapshot(editor->getLocalBounds(), false, scale);
 
     // The editor already draws its own rounded orange border inset by `pad`

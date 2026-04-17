@@ -46,6 +46,15 @@ namespace KnobDesign
         float degrees = rotationStartAngle + norm01 * (rotationEndAngle - rotationStartAngle);
         return juce::degreesToRadians(degrees);
     }
+
+    // Non-deprecated replacement for juce::Font::getStringWidthFloat (which
+    // was marked deprecated in JUCE 8 in favour of GlyphArrangement).
+    inline float stringWidth(const juce::Font& font, const juce::String& text)
+    {
+        juce::GlyphArrangement ga;
+        ga.addLineOfText(font, text, 0.0f, 0.0f);
+        return ga.getBoundingBox(0, -1, true).getWidth();
+    }
 }
 
 // ── Custom LookAndFeel ──
@@ -209,12 +218,12 @@ public:
             // Measure the minus sign width at marker size
             g.setFont(getBoldFont(markerFontSize));
             auto minusStr = juce::String(juce::CharPointer_UTF8("\xe2\x88\x92"));
-            float minusW = g.getCurrentFont().getStringWidthFloat(minusStr);
+            float minusW = KnobDesign::stringWidth(g.getCurrentFont(), minusStr);
 
             // Measure the infinity symbol width at inf size (thinner weight)
             g.setFont(getRegularFont(infFontSize));
             auto infStr = juce::String(juce::CharPointer_UTF8("\xe2\x88\x9e"));
-            float infW = g.getCurrentFont().getStringWidthFloat(infStr);
+            float infW = KnobDesign::stringWidth(g.getCurrentFont(), infStr);
 
             float totalW = minusW + infW;
             float startX = label0X - totalW * 0.5f;
@@ -292,20 +301,20 @@ public:
             // dB suffix uses bold (same weight as +24 marker)
             auto dbFont = getBoldFont(baseHeight);
             juce::String dbSuffix = " dB";
-            float dbW = dbFont.getStringWidthFloat(dbSuffix);
+            float dbW = KnobDesign::stringWidth(dbFont, dbSuffix);
             auto baseFont = getRegularFont(baseHeight);
 
             // Measure minus sign width (static left zone)
             auto minusStr = juce::String(juce::CharPointer_UTF8("\xe2\x88\x92"));
-            float minusW = pillMinusFont.getStringWidthFloat(minusStr);
+            float minusW = KnobDesign::stringWidth(pillMinusFont, minusStr);
             float minusGap = baseHeight * 0.15f;  // gap between minus and value
 
             // Measure widest possible value area
             // Widest numeric: "99.9" (digits only, sign is separate)
             // Widest symbol: ∞ at knob marker size
             auto infStr = juce::String(juce::CharPointer_UTF8("\xe2\x88\x9e"));
-            float infW = pillInfFont.getStringWidthFloat(infStr);
-            float numW = baseFont.getStringWidthFloat("99.9");
+            float infW = KnobDesign::stringWidth(pillInfFont, infStr);
+            float numW = KnobDesign::stringWidth(baseFont, "99.9");
             float valueZoneW = juce::jmax(infW, numW);
 
             float pillH = baseHeight * 1.4f;
