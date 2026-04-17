@@ -14,7 +14,7 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
     gainSlider.setMouseCursor(juce::MouseCursor::UpDownResizeCursor);
     addAndMakeVisible(gainSlider);
 
-    gainLabel.setText("Gain", juce::dontSendNotification);
+    gainLabel.setText("GAIN", juce::dontSendNotification);
     gainLabel.setJustificationType(juce::Justification::centredBottom);
     addAndMakeVisible(gainLabel);
 
@@ -40,7 +40,7 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
         startSnapAnimation(gainSlider, gainAnim);
     };
 
-    latencyLabel.setText("Latency: 0ms", juce::dontSendNotification);
+    latencyLabel.setText("LATENCY: 0ms", juce::dontSendNotification);
     latencyLabel.setJustificationType(juce::Justification::centredLeft);
     latencyLabel.setColour(juce::Label::textColourId, KnobDesign::accentColour.darker(0.3f));
     // Label doesn't intercept — the HitArea above it handles hover and clicks
@@ -111,7 +111,7 @@ void BoostorAudioProcessorEditor::timerCallback()
     {
         latencyTick = 0;
         float latencyMs = processorRef.getLastProcessLatencyMs();
-        latencyLabel.setText("Latency: " + juce::String(latencyMs, 3) + "ms",
+        latencyLabel.setText("LATENCY: " + juce::String(latencyMs, 3) + "ms",
                              juce::dontSendNotification);
     }
 
@@ -262,7 +262,7 @@ void BoostorAudioProcessorEditor::resized()
     latencyBaseFontSize = latencyFontSize;
     // Hit area: narrow — matches the actual text width with a small horizontal pad
     auto latencyFont = conjusLAF.getRegularFont(latencyFontSize);
-    int textW = static_cast<int>(latencyFont.getStringWidthFloat("Latency: 0.000ms"));
+    int textW = static_cast<int>(latencyFont.getStringWidthFloat("LATENCY: 0.000ms"));
     int hitPadX = static_cast<int>(latencyFontSize * 0.8f);
     int hitPadY = latencyH;
     int hitW = textW + 2 * hitPadX;
