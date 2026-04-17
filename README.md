@@ -1,7 +1,7 @@
 # boostor
 
 <p align="center">
-  <picture><img src="https://conjius-dp.github.io/boostor/screenshot.png" width="420" alt="Boostor"></picture>
+  <picture><img src="https://conjius-dp.github.io/boostor/screenshot.png" width="210" alt="Boostor"></picture>
 </p>
 
 <p align="center">
