@@ -210,14 +210,16 @@ void BoostorAudioProcessorEditor::paint(juce::Graphics& g)
 {
     g.fillAll(KnobDesign::bgColour);
 
-    // Draw conjius logo in bottom-left — dim by default, brighten + scale up on hover
+    // Draw conjius logo in bottom-left — inside the orange border padding so
+    // it sits cleanly within the bordered region.
     if (logoImage.isValid())
     {
         float scale = static_cast<float>(getWidth()) / static_cast<float>(KnobDesign::defaultSize);
         int baseSize = static_cast<int>(37.5f * scale);
+        int padPx = static_cast<int>(20.0f * scale); // matches editor border inset
         int padLeft = baseSize / 3;
-        int baseX = padLeft;
-        int baseY = getHeight() - baseSize;
+        int baseX = padPx + padLeft;
+        int baseY = getHeight() - padPx - baseSize;
         logoBounds = { baseX, baseY, baseSize, baseSize };
 
         float hoverScale = 1.0f + 0.2f * logoHoverProgress;
@@ -297,7 +299,8 @@ void BoostorAudioProcessorEditor::resized()
     latencyLabel.setFont(conjusLAF.getRegularFont(latencyFontSize));
     latencyLabel.setJustificationType(juce::Justification::centredBottom);
     int latencyH = static_cast<int>(latencyFontSize * 2.0f);
-    latencyBaseBounds = { 0, getHeight() - latencyH, getWidth(), latencyH };
+    const int padPx = static_cast<int>(20.0f * w / static_cast<float>(KnobDesign::defaultSize));
+    latencyBaseBounds = { 0, getHeight() - latencyH - padPx, getWidth(), latencyH };
     latencyBaseFontSize = latencyFontSize;
     // Hit area: narrow — matches the actual text width with a small horizontal pad
     auto latencyFont = conjusLAF.getRegularFont(latencyFontSize);

@@ -53,42 +53,29 @@ int main(int argc, char** argv)
 
     auto snap = editor->createComponentSnapshot(editor->getLocalBounds(), false, scale);
 
-    // Crop off the bottom band equal to the conjius logo height so the footer
-    // (latency label, etc.) doesn't appear in the published screenshot.
-    const int cropPx = static_cast<int>(37.5f
-                                        * (static_cast<float>(width) / static_cast<float>(KnobDesign::defaultSize))
-                                        * scale);
-    if (cropPx > 0 && cropPx < snap.getHeight())
+    // The editor already draws its own rounded orange border inset by `pad`
+    // pixels from each edge. Crop the outer bg padding so the image's outer
+    // edge aligns with that existing border, and mask the corners with the
+    // same radius so they follow the border's curve. No additional border is
+    // stroked — the editor's own border is the visible perimeter.
     {
-        juce::Image cropped{ juce::Image::ARGB, snap.getWidth(), snap.getHeight() - cropPx, true };
-        juce::Graphics cg{ cropped };
-        cg.drawImageAt(snap, 0, 0);
-        snap = cropped;
-    }
+        const float widthScale = static_cast<float>(width) / static_cast<float>(KnobDesign::defaultSize);
+        const int insetPx = static_cast<int>(20.0f * widthScale * scale);
+        const float cornerRadius = 79.0f * widthScale * scale;
 
-    // Rounded corners + orange border around the edge.
-    // Corner radius matches the knob radius at the default editor size
-    // (knob diameter = windowSize × 0.35 → radius ≈ 79 px at default, 158 at 2x render).
-    {
-        const float cornerRadius = 79.0f * scale;
-        const float borderW = 4.0f * scale;
-        const float w = static_cast<float>(snap.getWidth());
-        const float h = static_cast<float>(snap.getHeight());
+        const int outW = snap.getWidth() - 2 * insetPx;
+        const int outH = snap.getHeight() - 2 * insetPx;
 
-        juce::Image framed{ juce::Image::ARGB, snap.getWidth(), snap.getHeight(), true };
+        juce::Image framed{ juce::Image::ARGB, outW, outH, true };
         juce::Graphics rg{ framed };
 
         juce::Path mask;
-        mask.addRoundedRectangle(0.0f, 0.0f, w, h, cornerRadius);
+        mask.addRoundedRectangle(0.0f, 0.0f,
+                                 static_cast<float>(outW),
+                                 static_cast<float>(outH),
+                                 cornerRadius);
         rg.reduceClipRegion(mask);
-        rg.drawImageAt(snap, 0, 0);
-
-        rg.setColour(KnobDesign::accentColour);
-        juce::Path border;
-        border.addRoundedRectangle(borderW * 0.5f, borderW * 0.5f,
-                                   w - borderW, h - borderW,
-                                   cornerRadius - borderW * 0.5f);
-        rg.strokePath(border, juce::PathStrokeType(borderW));
+        rg.drawImageAt(snap, -insetPx, -insetPx);
 
         snap = framed;
     }
