@@ -1,4 +1,4 @@
-# Boostor
+# boostor
 
 <p align="center">
   <picture><img src="Assets/gain-knob-v2.png" width="240" alt="Boostor"></picture>
@@ -20,7 +20,7 @@
 
 A simple audio plugin with a single gain knob ranging from -inf (silence) to +24 dB. The gain parameter is fully automatable, so DAWs can map it to any MIDI controller.
 
-**Formats:** VST3 (macOS, Windows), AU & Standalone (macOS)
+Available as **VST3** (macOS, Windows), **AU** & **Standalone** (macOS) formats with stereo input/output.
 
 ## Dependencies
 
