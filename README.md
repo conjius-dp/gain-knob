@@ -14,6 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/conjius-dp/boostor/actions/workflows/ci.yml"><img src="https://github.com/conjius-dp/boostor/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/conjius-dp/boostor"><img src="https://codecov.io/gh/conjius-dp/boostor/branch/main/graph/badge.svg" alt="Coverage"></a>
   <a href="https://github.com/conjius-dp/boostor/releases/latest"><img src="https://img.shields.io/github/v/release/conjius-dp/boostor?label=stable&color=brightgreen" alt="Stable"></a>
   <a href="https://github.com/conjius-dp/boostor/releases"><img src="https://img.shields.io/github/v/release/conjius-dp/boostor?include_prereleases&label=nightly" alt="Nightly"></a>
 </p>
