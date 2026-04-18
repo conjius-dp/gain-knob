@@ -34,6 +34,14 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
 
+    // Host-integrated bypass. DAWs that drive a host-side bypass parameter
+    // will flip this, and processBlock early-returns on the same APVTS
+    // entry so the in-plugin power button stays in sync.
+    juce::AudioParameterBool* getBypassParameter() const override
+    {
+        return dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter("bypass"));
+    }
+
     // Wall-clock time the last processBlock took (CPU load indicator).
     float getLastProcessLatencyMs() const { return lastProcessLatencyMs.load(std::memory_order_relaxed); }
 

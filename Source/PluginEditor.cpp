@@ -52,6 +52,13 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
     addAndMakeVisible(latencyHitArea);
     latencyHitArea.toFront(false); // keep above latencyLabel
 
+    // Bypass button — power-switch in the top-right corner. Drives the
+    // APVTS bool parameter via ButtonAttachment; processBlock early-returns
+    // on that flag for a true untouched pass-through.
+    addAndMakeVisible(bypassButton);
+    bypassAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        processorRef.getAPVTS(), "bypass", bypassButton);
+
     // Resizable window (slightly taller than wide) — restore saved size or use default
     int savedW = processorRef.editorWidth.load();
     int savedH = processorRef.editorHeight.load();
@@ -252,7 +259,10 @@ void BoostorAudioProcessorEditor::paint(juce::Graphics& g)
                      / static_cast<float>(titleLogoImage.getHeight());
         float titleW = titleH * aspect;
         float titleX = (w - titleW) * 0.5f;
-        float titleY = h * 0.085f;  // logo nudged up ~25px from the border top
+        // Logo sits ~half-logo-height lower than before so it clears the new
+        // bypass button in the top-right corner and feels less cramped
+        // against the border arc.
+        float titleY = h * 0.085f + titleH * 0.5f;
         g.drawImage(titleLogoImage,
                     juce::Rectangle<float>(titleX, titleY, titleW, titleH),
                     juce::RectanglePlacement::centred);
@@ -292,6 +302,21 @@ void BoostorAudioProcessorEditor::resized()
     }
 
     float w = static_cast<float>(getWidth());
+
+    // Bypass button — top-right corner, sized + padded proportional to the
+    // editor so it stays clear of the orange border arc on all windows.
+    {
+        const float scaleF  = w / static_cast<float>(KnobDesign::defaultSize);
+        const float btnPad  = 36.0f * scaleF;
+        const float btnSize = 34.0f * scaleF;
+        const float btnX    = static_cast<float>(getWidth()) - btnPad - btnSize;
+        const float btnY    = btnPad;
+        bypassButton.setBounds(static_cast<int>(btnX),
+                               static_cast<int>(btnY),
+                               static_cast<int>(btnSize),
+                               static_cast<int>(btnSize));
+        bypassButton.toFront(false);
+    }
 
     // Dynamic "Gain" label — placed below the title logo
     float gainFontSize = w * KnobDesign::gainLabelScale;

@@ -26,6 +26,12 @@ BoostorAudioProcessor::createParameterLayout()
         juce::AudioParameterFloatAttributes()
             .withLabel("dB")));
 
+    // Host-visible bypass. processBlock early-returns on this so the audio
+    // path is truly untouched when bypassed — no gain, no smoothing, no
+    // latency timer tick.
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID{"bypass", 1}, "Bypass", false));
+
     return { params.begin(), params.end() };
 }
 
@@ -65,6 +71,11 @@ void BoostorAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 
     for (auto i = numChannels; i < numOutputChannels; ++i)
         buffer.clear(i, 0, numSamples);
+
+    // Hard bypass — pass input through untouched, skip every dsp op
+    // including the smoother update, latency measurement, and gain math.
+    if (apvts.getRawParameterValue("bypass")->load() >= 0.5f)
+        return;
 
     const float gainDB = gainParam->load();
     const float targetGain = juce::Decibels::decibelsToGain(gainDB, -100.0f);

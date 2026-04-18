@@ -1,6 +1,7 @@
 #pragma once
 #include "PluginProcessor.h"
 #include "KnobDesign.h"
+#include "BypassButton.h"
 #include "BinaryData.h"
 
 // ── Slider subclass that delegates double-click to the editor ──
@@ -72,7 +73,9 @@ private:
     AnimatedSlider gainSlider;
     juce::Label gainLabel;
     juce::Label latencyLabel;
+    BypassButton bypassButton;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
     juce::Image logoImage;
     juce::Image titleLogoImage;
 
