@@ -33,7 +33,15 @@ public:
     void setStateInformation(const void* data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
+
+    // Wall-clock time the last processBlock took (CPU load indicator).
     float getLastProcessLatencyMs() const { return lastProcessLatencyMs.load(std::memory_order_relaxed); }
+
+    // Algorithmic latency in milliseconds — the buffering delay this plugin
+    // introduces. Boostor does per-sample gain only (no FFT, no delay line),
+    // so it's exactly zero. Kept as a method for symmetry with tiptoe and
+    // in case a future feature adds actual buffering.
+    float getAlgorithmicLatencyMs() const { return 0.0f; }
 
     // Editor size persistence
     std::atomic<int> editorWidth  { KnobDesign::defaultSize };

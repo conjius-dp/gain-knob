@@ -131,8 +131,10 @@ void BoostorAudioProcessorEditor::timerCallback()
     if (++latencyTick >= 12)
     {
         latencyTick = 0;
-        float latencyMs = processorRef.getLastProcessLatencyMs();
-        latencyLabel.setText("LATENCY: " + juce::String(latencyMs, 3) + "ms",
+        // Algorithmic latency — what the host compensates for and what users
+        // hear vs. bypass. Boostor's is zero (no buffering / no FFT).
+        float latencyMs = processorRef.getAlgorithmicLatencyMs();
+        latencyLabel.setText("LATENCY: " + juce::String(latencyMs, 1) + "ms",
                              juce::dontSendNotification);
     }
 

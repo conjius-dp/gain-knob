@@ -35,6 +35,11 @@ void BoostorAudioProcessor::prepareToPlay(double sampleRate, int /*samplesPerBlo
     float gainDB = gainParam->load();
     smoothedGain.setCurrentAndTargetValue(
         juce::Decibels::decibelsToGain(gainDB, -100.0f));
+
+    // Explicitly report zero algorithmic latency so hosts (and humans
+    // reading automation-related diagnostics) see the correct value. 0 is
+    // the default; setting it explicitly is just documentation for readers.
+    setLatencySamples(0);
 }
 
 void BoostorAudioProcessor::releaseResources() {}
