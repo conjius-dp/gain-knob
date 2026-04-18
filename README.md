@@ -33,7 +33,7 @@ Single-knob gain. −∞ dB to +24 dB, fully automatable, zero algorithmic laten
 | Gain   | −∞ dB – +24 dB | 0 dB |
 | Bypass | on / off | off |
 
-Power button (top-right) hard-bypasses the plugin — input passes through untouched.
+Power button (top-right) hard-bypasses the plugin. Input passes through untouched.
 
 ## Build
 
