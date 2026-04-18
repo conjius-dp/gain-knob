@@ -103,9 +103,13 @@ BoostorAudioProcessorEditor::~BoostorAudioProcessorEditor()
 
 void BoostorAudioProcessorEditor::setChromeVisible(bool visible)
 {
+    // Used by the headless screenshot tool for the README / release
+    // image: hide the conjius logo, the latency label, AND the bypass
+    // button so the screenshot captures the bare plugin UI.
     showChrome = visible;
     latencyLabel.setVisible(visible);
     latencyHitArea.setVisible(visible);
+    bypassButton.setVisible(visible);
     repaint();
 }
 
