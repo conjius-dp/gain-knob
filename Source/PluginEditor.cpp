@@ -40,7 +40,7 @@ BoostorAudioProcessorEditor::BoostorAudioProcessorEditor(BoostorAudioProcessor& 
         startSnapAnimation(gainSlider, gainAnim);
     };
 
-    latencyLabel.setText("LATENCY: 0ms", juce::dontSendNotification);
+    latencyLabel.setText("LATENCY: 0.000ms", juce::dontSendNotification);
     latencyLabel.setJustificationType(juce::Justification::centredLeft);
     latencyLabel.setColour(juce::Label::textColourId, KnobDesign::accentColour.darker(0.3f));
     // Label doesn't intercept — the HitArea above it handles hover and clicks
@@ -141,7 +141,7 @@ void BoostorAudioProcessorEditor::timerCallback()
         // Algorithmic latency — what the host compensates for and what users
         // hear vs. bypass. Boostor's is zero (no buffering / no FFT).
         float latencyMs = processorRef.getAlgorithmicLatencyMs();
-        latencyLabel.setText("LATENCY: " + juce::String(latencyMs, 1) + "ms",
+        latencyLabel.setText("LATENCY: " + juce::String(latencyMs, 3) + "ms",
                              juce::dontSendNotification);
     }
 
@@ -303,11 +303,13 @@ void BoostorAudioProcessorEditor::resized()
 
     float w = static_cast<float>(getWidth());
 
-    // Bypass button — top-right corner, sized + padded proportional to the
-    // editor so it stays clear of the orange border arc on all windows.
+    // Bypass button — top-right corner. Padding on top + right are equal
+    // and larger than the first pass so the button sits comfortably inside
+    // the orange border, a bit lower and further left than the original
+    // tight-corner position.
     {
         const float scaleF  = w / static_cast<float>(KnobDesign::defaultSize);
-        const float btnPad  = 36.0f * scaleF;
+        const float btnPad  = 56.0f * scaleF;   // was 36 — nudged inward
         const float btnSize = 34.0f * scaleF;
         const float btnX    = static_cast<float>(getWidth()) - btnPad - btnSize;
         const float btnY    = btnPad;
