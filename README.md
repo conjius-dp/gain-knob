@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/conjius-dp/boostor/graphs/commit-activity"><img src="https://repobeats.axiom.co/api/embed/REPOBEATS_HASH_BOOSTOR.svg" width="700" alt="Repobeats analytics image"></a>
+  <a href="https://github.com/conjius-dp/boostor/graphs/commit-activity"><img src="https://repobeats.axiom.co/api/embed/7d2bd53c5f8ebe8ad748d1e545bdd174a61521ea.svg" width="700" alt="Repobeats analytics image"></a>
 </p>
 
 A simple audio plugin with a single gain knob ranging from -inf (silence) to +24 dB. The gain parameter is fully automatable, so DAWs can map it to any MIDI controller.
