@@ -7,3 +7,9 @@ cmake-build-*/
 CLAUDE.md
 .claude/
 JUCE/
+
+# Coverage-generated files — Codecov hosts these now; we never commit them.
+coverage.info
+coverage-html/
+docs/coverage/
+docs/badges/
