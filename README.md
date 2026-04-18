@@ -24,63 +24,33 @@
   <a href="https://github.com/conjius-dp/boostor/graphs/commit-activity"><img src="https://repobeats.axiom.co/api/embed/7d2bd53c5f8ebe8ad748d1e545bdd174a61521ea.svg" width="700" alt="Repobeats analytics image"></a>
 </p>
 
-A simple audio plugin with a single gain knob ranging from -inf (silence) to +24 dB. The gain parameter is fully automatable, so DAWs can map it to any MIDI controller.
+Single-knob gain. −∞ dB to +24 dB, fully automatable, zero algorithmic latency. VST3 (macOS, Windows), AU + Standalone (macOS). Stereo in/out.
 
-Available as **VST3** (macOS, Windows), **AU** & **Standalone** (macOS) formats with stereo input/output.
+## Parameters
 
-## Dependencies
-
-| Dependency | Version | Notes |
+| Parameter | Range | Default |
 |---|---|---|
-| [JUCE](https://github.com/juce-framework/JUCE) | **8.0.12** | Must be cloned into the project root as `JUCE/` |
-| CMake | **≥ 3.22** | Tested with 3.29.2 |
-| C++ compiler | **C++17** | Tested with Apple Clang 17.0.0 |
-| [Ninja](https://ninja-build.org/) | **≥ 1.11** | Fast build system, replaces Make |
-| [ccache](https://ccache.dev/) | **≥ 4.0** | Compiler cache for faster rebuilds |
+| Gain   | −∞ dB – +24 dB | 0 dB |
+| Bypass | on / off | off |
 
-## Setup
+Power button (top-right) hard-bypasses the plugin — input passes through untouched.
 
-1. Clone the repository:
+## Build
 
 ```bash
 git clone https://github.com/conjius-dp/boostor.git
 cd boostor
-```
-
-2. Clone JUCE 8.0.12 into the project root:
-
-```bash
-git clone --branch 8.0.12 --depth 1 https://github.com/juce-framework/JUCE.git
-```
-
-3. Install Ninja and ccache:
-
-```bash
-brew install ninja ccache
-```
-
-4. Configure and build:
-
-```bash
-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-  -DCMAKE_C_COMPILER_LAUNCHER=ccache
+git clone --depth 1 --branch 8.0.12 https://github.com/juce-framework/JUCE.git JUCE
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache
 cmake --build build
 ```
 
-Ninja builds all targets in parallel by default. ccache caches compiled objects so incremental rebuilds after small changes are near-instant.
+VST3 / AU bundles are auto-copied to `~/Library/Audio/Plug-Ins/`.
 
-The built plugins are in `build/Boostor_artefacts/Release/`:
+Requires JUCE 8.0.12, CMake ≥ 3.22, a C++17 compiler, Ninja, ccache.
 
-- `VST3/boostor.vst3`
-- `AU/boostor.component`
-- `Standalone/boostor.app`
-
-On macOS, `COPY_PLUGIN_AFTER_BUILD` is enabled so the VST3 and AU are automatically installed to `~/Library/Audio/Plug-Ins/`.
-
-## Running Tests
+## Tests
 
 ```bash
-cmake --build build --target BoostorTests
-./build/BoostorTests_artefacts/Release/BoostorTests
+cmake --build build --target BoostorTests && ./build/BoostorTests_artefacts/Release/BoostorTests
 ```
